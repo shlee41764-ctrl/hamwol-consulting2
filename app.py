@@ -17,7 +17,7 @@ if not my_key or "여기에" in my_key:
     st.stop()
 
 # =========================================================
-# [설정 2] 안전 필터 해제 (생기부 분석 필수 설정)
+# [설정 2] 안전 필터 해제 (필수)
 # =========================================================
 safety_settings = {
     HarmCategory.HARM_CATEGORY_HARASSMENT: HarmBlockThreshold.BLOCK_NONE,
@@ -26,16 +26,19 @@ safety_settings = {
     HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT: HarmBlockThreshold.BLOCK_NONE,
 }
 
-# 모델 설정 (이름을 표준 버전인 'gemini-1.5-pro'로 변경)
+# =========================================================
+# [설정 3] 모델 변경 (Gemini 1.5 Flash)
+# 가장 빠르고 오류가 없는 모델입니다.
+# =========================================================
 genai.configure(api_key=my_key)
 model = genai.GenerativeModel(
-    model_name='gemini-1.5-pro',  # 여기가 수정되었습니다!
+    model_name='gemini-1.5-flash', 
     safety_settings=safety_settings
 )
 
-# --- 시스템 프롬프트 (PDF 내용) ---
+# --- 시스템 프롬프트 ---
 SYSTEM_PROMPT = """
-당신은 입시 전문 컨설턴트입니다. 
+당신은 대한민국 최고의 입시 컨설턴트입니다. 
 학생 정보를 받으면 [입시 컨설팅 전문 프롬프트]의 10단계 구조에 맞춰 
 상세하고 체계적인 입시 전략 보고서를 작성하세요.
 특히 '6단계 세특 예시'와 '8단계 면접 질문'을 구체적으로 작성하세요.
@@ -43,7 +46,7 @@ SYSTEM_PROMPT = """
 
 # --- 화면 구성 ---
 st.title("🎓 함월고등학교 AI 입시 컨설팅")
-st.info("💡 팁: 분석 내용이 많아서 결과가 나올 때까지 약 30초~1분 정도 걸릴 수 있습니다.")
+st.info("💡 팁: 'Flash' 모델을 사용하여 분석 속도가 매우 빠릅니다.")
 
 with st.sidebar:
     st.header("학생 정보 입력")
@@ -57,11 +60,11 @@ if btn:
     if not record:
         st.warning("생기부 내용을 입력해주세요.")
     else:
-        # 스트리밍 출력 (타임아웃 방지)
+        # 스트리밍 출력
         output_placeholder = st.empty()
         full_text = ""
         
-        with st.spinner("함월고 AI가 생기부를 분석하고 있습니다..."):
+        with st.spinner("AI가 생기부를 분석하고 있습니다..."):
             try:
                 user_msg = f"""
                 1. 학년: {grade}
@@ -70,7 +73,6 @@ if btn:
                 4. 생기부 내용:
                 {record}
                 """
-                # stream=True로 설정하여 한 줄씩 받아옵니다.
                 response = model.generate_content([SYSTEM_PROMPT, user_msg], stream=True)
                 
                 for chunk in response:
@@ -79,4 +81,7 @@ if btn:
                     
             except Exception as e:
                 st.error(f"오류가 발생했습니다: {e}")
-                st.write("혹시 '400' 에러라면 생기부 내용이 너무 길어서일 수 있습니다. 내용을 조금 줄여서 시도해보세요.")
+                st.markdown("---")
+                st.write("🔍 **문제 해결 팁:**")
+                st.write("1. API 키가 정확한지 확인해주세요.")
+                st.write("2. 생기부 내용이 너무 길다면(만 자 이상) 조금 줄여보세요.")
