@@ -5,7 +5,7 @@ import json
 # =========================================================
 # [설정] API 키 입력
 # =========================================================
-my_key = "AIzaSyCIRagsQj4ULjhdHt4UTujM-gLcy9XeGjk"
+my_key = "AIzaSyCWGrSAFaId6naXMYryEm9XUeZNHx7fSgQ"
 
 st.set_page_config(page_title="함월고 입시 컨설팅", page_icon="🎓", layout="wide")
 
@@ -121,3 +121,4 @@ if btn:
                     
             except Exception as e:
                 st.error(f"예상치 못한 오류: {e}")
+
