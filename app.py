@@ -8,7 +8,7 @@ st.set_page_config(page_title="함월고 AI 입시 컨설팅", page_icon="🎓",
 # [중요] API 키 설정 (클라우드 배포용 보안 설정)
 # 스트림릿 클라우드의 'Secrets'에서 키를 가져오거나, 없으면 에러 메시지 띄움
 try:
-    GOOGLE_API_KEY = st.secrets["GOOGLE_API_KEY"]
+    GOOGLE_API_KEY = st.secrets["AIzaSyCIRagsQj4ULjhdHt4UTujM-gLcy9XeGjk"]
 except:
     st.error("API 키가 설정되지 않았습니다. 설정 메뉴에서 Secrets를 확인하세요.")
     st.stop()
@@ -25,4 +25,5 @@ SYSTEM_PROMPT = """
 
 # 사이드바 및 메인 화면 로직 (기존 코드 그대로 사용)
 # ... (아까 드린 코드의 아랫부분과 동일합니다) ...
+
 # 단, user_input 부분 등은 그대로 두시면 됩니다.
